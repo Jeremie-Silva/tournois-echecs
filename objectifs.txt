@@ -1,0 +1,10 @@
+MVC
+Diagramme de class
+Diagramme UML
+Noms explicites
+Typage
+code explicite
+Méthodes simples/réutilisables/peu de params
+Découpage clair
+
+Tests ?
