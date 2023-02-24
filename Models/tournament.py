@@ -37,6 +37,3 @@ class Tournament:
 
     def generate_rounds_list(self):
         pass
-
-# regional_championship = Tournament("regional championship","Toulouse","24/02/2023","25/02/2023", "Un championnat de test")
-# print(regional_championship.player_one)
