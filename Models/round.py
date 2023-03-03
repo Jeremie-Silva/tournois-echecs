@@ -7,5 +7,5 @@ class Round:
         self.score_two = 0
         self.round = ([player_one, self.score_one],[player_two, self.score_two])
 
-    def generate_round_name():
-        pass
+    # def generate_round_name():
+    #     pass

@@ -1,4 +1,4 @@
-from Models.player import Player
+from player import Player
 import json
 
 class Tournament:
@@ -11,7 +11,7 @@ class Tournament:
         self.description:str = description
         self.number_of_rounds:int = number_of_rounds
         self.current_round:int = 0
-        self.players_list:list[Player] = self.generate_players_list()
+        # self.players_list:list[Player] = self.generate_players_list()
         self.rounds_list = self.generate_rounds_list()
 
     # def generate_players_list(self):
