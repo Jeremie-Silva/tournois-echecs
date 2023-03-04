@@ -1,44 +1,42 @@
 import json
+from Controllers.data_controller import DataController
 
 
-class PlayerController:
+class PlayerController(DataController):
 
-    def set_information_player(self):
+    def get_information_player_str(self, message: str):
         """Ask the information from the user,
-        checks the validity and stores it in the self
+        print a custom message,
+        checks the validity and return it
         """
-        name_input: str = ""
+        input_value: str = ""
         while True:
             try:
-                name_input = str(input("Nom du joueur : "))
+                input_value = str(input(f"{message} : "))
+                # :TODO refactorer les 2 methode en une, créer des sous méthodes "is value valid"
+                if input_value.isalpha() and len(input_value) < 100:
+                    break
             except ValueError:
                 pass
-            if name_input.isalpha() and len(name_input) < 100:
-                self.name = name_input
-                break
-            print("-Erreur- Nom invalide")
+            print(f"-Erreur- {message} invalide")
+        return input_value
+        #TODO: global controller ?
 
-        last_name_input: str = ""
+    def get_information_player_int(self, message: str):
+        """Ask the information from the user,
+        print a custom message,
+        checks the validity and return it
+        """
+        input_value: str = ""
         while True:
             try:
-                last_name_input = str(input("Prénom du joueur : "))
+                input_value = int(input(f"{message} : "))
+                if len(str(input_value)) == 1 or len(str(input_value)) == 2 and str(input_value).isdigit():
+                    break
             except ValueError:
                 pass
-            if last_name_input.isalpha() and len(last_name_input) < 100:
-                self.last_name = last_name_input
-                break
-            print("-Erreur- Prénom invalide")
-
-        birth_date_input: int = 0
-        while True:
-            try:
-                birth_date_input = int(input("Date de naissance du joueur : "))
-            except ValueError:
-                pass
-            if len(str(birth_date_input)) == 8:
-                self.birth_date = birth_date_input
-                break
-            print("-Erreur- Date invalide (exemple: 24122023)")
+            print(f"-Erreur- {message} invalide ")
+        return input_value
 
     def is_in_json_dataset(self, name: str, last_name: str, birth_date: int):
         """Check with 3 parameters if the new player instance is already exist

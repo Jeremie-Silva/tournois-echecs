@@ -1,14 +1,16 @@
 from Models.player import Player
+from Models.tournament import Tournament
 
 
 def main_menu():
     input_choice = 0
-    valid_choices: list[int] = [1]
+    valid_choices: list[int] = [1, 2]
 
     while int(input_choice) not in valid_choices:
         print("-------------------------------------")
         print("Voici la liste des choix possible :")
         print("1 : Enregistrer un nouveau joueur")
+        print("2 : Enregistrer un nouveau tournoi")
         try:
             input_choice = int(input("Veuillez saisir un chiffre : "))
             if input_choice in valid_choices:
@@ -32,4 +34,8 @@ def bring_user_to_choice(input_choice: int):
                 new_player.last_name,
                 new_player.birth_date):
             new_player.export_data_to_json_file()
-#TODO: ajouter les autres possibilitées dans le menu  
+    if input_choice == 2:
+        new_tournament = Tournament()
+
+
+# TODO: ajouter les autres possibilitées dans le menu

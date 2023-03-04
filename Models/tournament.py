@@ -1,39 +1,18 @@
-from player import Player
-import json
+from Controllers.tournament_controller import TournamentController
+from Models.player import Player
 
-class Tournament:
-    def __init__(self, name:str, place:str, date_start:str, date_end:str, 
-                description:str, number_of_rounds:int=4):
-        self.name:str = name
-        self.place:str = place
-        self.date_start:str = date_start
-        self.date_end:str = date_end
-        self.description:str = description
-        self.number_of_rounds:int = number_of_rounds
-        self.current_round:int = 0
-        # self.players_list:list[Player] = self.generate_players_list()
-        self.rounds_list = self.generate_rounds_list()
 
-    # def generate_players_list(self):
-        # players_list:list[Player] = []
-        # player_one = "efef"
-        
-        # with open('Data/Players/players.json', 'r') as json_player_file:
-        #     data_players = json.load(json_player_file)
-
-        # identify = len(data_players) + 1
-        # data_players[f'player{identify}'] = {
-        #     "name": self.name, 
-        #     "last name": self.last_name,
-        #     "birth date": self.birth_date
-        # }
-        # with open('Data/Players/players.json', 'w') as json_player_file:
-        #     json.dump(data_players, json_player_file)
-            
-        # return players_list
-
-    def _get_players(self):
-        pass
-
-    def generate_rounds_list(self):
-        pass
+class Tournament(TournamentController):
+    def __init__(self):
+        self.name: str = self.get_information_tournament_str("Nom du tournoi")
+        self.place: str = self.get_information_tournament_str("Lieu du tournoi")
+        self.date_start: str = self.get_information_tournament_str("date de début du tournoi")
+        # TODO: Utiliser la librairie datetime
+        self.date_end: str = self.get_information_tournament_str("date de fin du tournoi")
+        self.description: str = self.get_information_tournament_str("description du tournoi")
+        self.number_of_rounds: int = 4
+        self.current_round: int = 0
+        self.players_count: int = self.get_information_player_int("Nombre de joueurs")
+        self.players_list:list[Player] = self.generate_players_list()
+        print(self.players_list)
+        # self.rounds_list = self.generate_rounds_list()
