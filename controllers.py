@@ -10,7 +10,7 @@ class DataController:
         """
         input_value: str = ""
         while True:
-            # TODO: Utiliser la valeur Literal (import)
+            # TODO: Utiliser la valeur Literal (import) efef
             if data_type == "string":
                 try:
                     input_value = str(input(f"{message} : "))
