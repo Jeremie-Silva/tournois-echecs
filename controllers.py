@@ -1,4 +1,5 @@
 import json
+import datetime
 
 
 class DataController:
@@ -9,6 +10,7 @@ class DataController:
         """
         input_value: str = ""
         while True:
+            # TODO: Utiliser la valeur Literal (import)
             if data_type == "string":
                 try:
                     input_value = str(input(f"{message} : "))
@@ -16,7 +18,17 @@ class DataController:
                     pass
                 if input_value.isalpha() and len(input_value) < 100:
                     break
-            #TODO: ajouter le traitement de type datetime
+            if data_type == "birth_date":
+                input_year = ""
+                input_month = ""
+                input_day = ""
+                try:
+                    input_year = str(input("Année de naissance : "))
+                    input_month = str(input("Mois de naissance : "))
+                    input_day = str(input("Jour de naissance : "))
+                except:
+                    input_value = datetime(input_year, input_month, input_day)
+                # TODO: FINIR IMPORT DATETIME
             else:
                 try:
                     input_value = int(input(f"{message} : "))

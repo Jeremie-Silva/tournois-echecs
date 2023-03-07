@@ -9,7 +9,7 @@ class Player(PlayerController):
         self.name: str = self.get_information_user("Nom du joueur")
         self.last_name: str = self.get_information_user("Prénom du joueur")
         self.birth_date: int = self.get_information_user(
-            "Date de naissance du joueur (exemple: 24122023)", data_type="date")
+            "Date de naissance du joueur (exemple: 24122023)", data_type="birth_date")
         # TODO: Utiliser la librairie datetime
 
 class Tournament(TournamentController):
