@@ -1,7 +1,6 @@
 import json
 import datetime
 from typing import Literal
-from models import Player
 
 
 class DataController:
@@ -86,17 +85,10 @@ class PlayerController(DataController):
 
 class TournamentController(DataController):
 
-    # def generate_players_list(self):
-    #     players_list: list[Player] = []
-    #     for i in range(0, self.players_count):
-    #         player_to_add = Player()
-    #         players_list.append(player_to_add)
-    #     return players_list
-
     def generate_players_list(self):
-        players_list = []
+        players_list: list[Player] = []
         for i in range(0, self.players_count):
-            new_player = Player()
+            new_player = super().__init__()
             players_list.append(new_player)
-
         return players_list
+    # TODO: debug cette methode

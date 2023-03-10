@@ -29,6 +29,7 @@ def main_menu():
 
 
 def bring_user_to_choice(input_choice: int):
+    # TODO: virer la creation de jours
     if input_choice == 1:
         new_player = Player()
         if not new_player.is_in_json_dataset(
