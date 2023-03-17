@@ -1,19 +1,16 @@
-from models import (
-    Player,
-    Tournament
+from controllers import (
+    PlayerController,
+    TournamentController
 )
 
 
-def main_menu():
+def main_menu() -> None:
     input_choice = 0
-    valid_choices: list[int] = [1, 2]
-    # TODO: ajouter les autres possibilités dans le menu
-
+    valid_choices: list[int] = [1]
     while int(input_choice) not in valid_choices:
         print("-------------------------------------")
         print("Voici la liste des choix possible :")
-        print("1 : Enregistrer un nouveau JOUEUR")
-        print("2 : Enregistrer un nouveau TOURNOI")
+        print("1 : Enregistrer un nouveau TOURNOI")
         try:
             input_choice = int(input("Veuillez saisir un chiffre : "))
             if input_choice in valid_choices:
@@ -25,22 +22,12 @@ def main_menu():
 
     print(" Choix valide !")
     print("-------------------------------------")
-    bring_user_to_choice(input_choice)
-
-
-def bring_user_to_choice(input_choice: int):
-    # TODO: virer la creation de jours
     if input_choice == 1:
-        new_player = Player()
-        if not new_player.is_in_json_dataset(
-                new_player.name,
-                new_player.last_name,
-                new_player.birth_date):
-            new_player.export_data_to_json_file()
+        print("Création du TOURNOI :")
+        tournament_controller.create_tournament()
 
-    if input_choice == 2:
-        new_tournament = Tournament()
 
+tournament_controller = TournamentController()
 
 if __name__ == '__main__':
     main_menu()
