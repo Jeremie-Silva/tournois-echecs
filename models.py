@@ -13,17 +13,23 @@ class Tournament:
 		self.date_end: str = date_end
 		self.description: str = description
 		self.number_of_rounds: int = number_of_rounds
-		self.current_round: int = 0
+		self.current_round: int = 1
 		self.players_count: int = players_count
 		self.players_list: list[Player] = players_list
 
 
-# TODO: poursuivre le dev ici
-# class Round:
-# 	def __init__(self, player_one: str, player_two: str) -> None:
-# 		self.round_name = round_name
-# 		self.player_one = player_one
-# 		self.player_two = player_two
-# 		self.score_one = 0
-# 		self.score_two = 0
-# 		self.round = ([player_one, self.score_one], [player_two, self.score_two])
+class Round:
+	def __init__(self, round_name: str, list_player: list[Player], list_matchs: list[list[Player]]) -> None:
+		self.round_name: str = round_name
+		self.list_player: list[Player] = list_player
+		self.list_matchs: list[list[Player]] = list_matchs
+
+
+class Match:
+	def __init__(self, round_name: str, player_one: str, player_two: str) -> None:
+		self.player_one = player_one
+		self.player_two = player_two
+		self.score_player_one = 0
+		self.score_player_two = 0
+		self.match_result = ([player_one, self.score_player_one], [player_two, self.score_player_two])
+
