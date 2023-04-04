@@ -1,5 +1,6 @@
 import datetime
 from typing import Literal
+from models import Match
 
 VALID_CHOICES: list[int] = [1]
 
@@ -70,6 +71,25 @@ class View:
             print(f"-Erreur- {message} invalide")
         return input_value
 
-    def get_result(self):
-        # TODO: recupérer les résultats
-        pass
+    def get_result_match(self, match: Match):
+        input_choice = 0
+        while int(input_choice) != 1 or int(input_choice) != 2:
+            print(match.match_name.upper())
+            print("JOUEUR 1 : ")
+            print(match.player_one)
+            print("JOUEUR 2 :")
+            print(match.player_two)
+            try:
+                input_choice = int(input("Indiquer le chiffre du gagnant : "))
+                # input_choice = 1
+                if input_choice == 1 or input_choice == 2:
+                    break
+                else:
+                    print("-Erreur- Choix invalide")
+            except ValueError:
+                print("-Erreur- Format invalide")
+        print(" Choix valide !")
+        print("-------------------------------------")
+        if input_choice == 1:
+            return "joueur 1"
+        return "joueur 2"

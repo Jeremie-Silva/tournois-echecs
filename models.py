@@ -2,8 +2,9 @@ class Player:
 	def __init__(self, name: str, last_name: str, birth_date: str) -> None:
 		self.name: str = name
 		self.last_name: str = last_name
-		self.birth_date: str = birth_date
-
+		self.birth_date: str = "birth_date"
+	def __str__(self):
+		return f"  Nom : {self.name} \n  Prénom : {self.last_name}\n  Date de naissance : {self.birth_date}\n"
 
 class Tournament:
 	def __init__(self, name: str, place: str, date_start: str, date_end: str, description: str, number_of_rounds: int, players_count: int, players_list: list[Player]) -> None:
@@ -26,7 +27,8 @@ class Round:
 
 
 class Match:
-	def __init__(self, round_name: str, player_one: str, player_two: str) -> None:
+	def __init__(self, match_name: str, player_one: Player, player_two: Player) -> None:
+		self.match_name = match_name
 		self.player_one = player_one
 		self.player_two = player_two
 		self.score_player_one = 0
