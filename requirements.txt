@@ -1,4 +1,5 @@
 #TODO: register dependencies
+#TODO: dosctrings
 #TODO: typing final
 #TODO : codingstyle
 #TODO : tests ?

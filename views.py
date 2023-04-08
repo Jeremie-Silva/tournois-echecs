@@ -2,20 +2,20 @@ import datetime
 from typing import Literal
 from models import Match
 
-VALID_CHOICES: list[int] = [1]
+MENU_CHOICES: list[int] = [1, 2]
 
 
 class View:
 
     def main_menu(self) -> None:
         input_choice = 0
-        while int(input_choice) not in VALID_CHOICES:
+        while int(input_choice) not in MENU_CHOICES:
             print("-------------------------------------")
             print("Voici la liste des choix possible :")
             print("1 : Enregistrer un nouveau TOURNOI")
             try:
                 input_choice = int(input("Veuillez saisir un chiffre : "))
-                if input_choice in VALID_CHOICES:
+                if input_choice in MENU_CHOICES:
                     break
                 else:
                     print("-Erreur- Choix invalide")
@@ -24,6 +24,8 @@ class View:
         print(" Choix valide !")
         print("-------------------------------------")
         if input_choice == 1:
+            print("Création de JOUEUR :")
+        elif input_choice == 2:
             print("Création du TOURNOI :")
         return input_choice
 
@@ -74,15 +76,15 @@ class View:
     def get_result_match(self, match: Match):
         input_choice = 0
         while int(input_choice) != 1 or int(input_choice) != 2:
-            print(match.match_name.upper())
-            print("JOUEUR 1 : ")
+            print(f"-----{match.match_name.upper()}-----\n")
+            print("JOUEUR 1 : tapez 1")
             print(match.player_one)
-            print("JOUEUR 2 :")
+            print("JOUEUR 2 : tapez 2")
             print(match.player_two)
+            print("MATCH NUL : tapez 0 \n")
             try:
-                input_choice = int(input("Indiquer le chiffre du gagnant : "))
-                # input_choice = 1
-                if input_choice == 1 or input_choice == 2:
+                input_choice = int(input("Veuillez saisir le resultat : "))
+                if input_choice == 0 or input_choice == 1 or input_choice == 2:
                     break
                 else:
                     print("-Erreur- Choix invalide")
@@ -92,4 +94,12 @@ class View:
         print("-------------------------------------")
         if input_choice == 1:
             return "joueur 1"
-        return "joueur 2"
+        elif input_choice == 2:
+            return "joueur 2"
+        else:
+            return "nul"
+
+    def print_players_list(player_controller):
+        for key in vars(player_controller):
+            print(key)
+            print(vars(player_controller)[key])

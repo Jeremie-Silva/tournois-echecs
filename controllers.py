@@ -12,13 +12,21 @@ from views import View
 
 class PlayerController:
 
+    def instantiate_players_from_json(self) -> None:
+        with open('Data/players.json', 'r') as json_player_file:
+            data_players = json.load(json_player_file)
+        for player, value in data_players.items():
+            setattr(self, player, Player(
+                value['name'], value['last name'], value['birth date'])
+            )
+
     def _player_is_in_json_dataset(self, name: str, last_name: str, birth_date: str) -> bool:
         """Check with 3 parameters if the new player instance is already exist
          in the json dataset.
         """
         with open('Data/players.json', 'r') as json_player_file:
             data_players = json.load(json_player_file)
-        for i in range(1, len(data_players) + 1):
+        for i in range(0, len(data_players)):
             if (name == data_players[f"player_{i}"]["name"] and
                     last_name == data_players[f"player_{i}"]["last name"] and
                     birth_date == data_players[f"player_{i}"]["birth date"]):
@@ -33,7 +41,7 @@ class PlayerController:
         with open('Data/players.json', 'r') as json_player_file:
             data_players = json.load(json_player_file)
 
-        identify = len(data_players) + 1
+        identify = len(data_players)
         data_players[f"player_{identify}"] = {
             "name": name,
             "last name": last_name,
@@ -43,12 +51,12 @@ class PlayerController:
             json.dump(data_players, json_player_file)
 
     def create_player(self) -> Player:
-        # name = View().get_information_user("Nom du joueur")
-        # last_name = View().get_information_user("Prénom du joueur")
-        # birth_date = View().get_information_user("Date de naissance du joueur (exemple: 24122023)", data_type="day_date")
-        name = "playername"
-        last_name = "playerlastname"
-        birth_date = "playerbirthdate"
+        name = View().get_information_user("Nom du joueur")
+        last_name = View().get_information_user("Prénom du joueur")
+        birth_date = View().get_information_user("Date de naissance du joueur (exemple: 24122023)", data_type="day_date")
+        # name = "playername"
+        # last_name = "playerlastname"
+        # birth_date = "playerbirthdate"
         new_player = Player(
             name=name,
             last_name=last_name,
@@ -56,18 +64,25 @@ class PlayerController:
         )
         return new_player
 
-    def save_player(self, Player) -> bool:
+    def save_player(self, player: Player) -> bool:
         if not self._player_is_in_json_dataset(
-            Player.name,
-            Player.last_name,
-            Player.birth_date
+            player.name,
+            player.last_name,
+            player.birth_date
         ):
             self._export_player_to_json_file(
-                Player.name,
-                Player.last_name,
-                Player.birth_date
+                player.name,
+                player.last_name,
+                player.birth_date
             )
         return True
+
+    def add_new_player(self) -> None:
+        new_player = self.create_player()
+        self.save_player(new_player)
+        with open('Data/players.json', 'r') as json_player_file:
+            data_players = json.load(json_player_file)
+        setattr(self, f"player_{len(data_players)-1}",new_player)
 
 
 class TournamentController:
@@ -103,6 +118,7 @@ class TournamentController:
     def _create_players_list(self, players_count) -> list[Player]:
         players_list: list[Player] = []
         for i in range(players_count):
+            # TODO: afficher la liste des joueurs en mémoire avec la vue
             new_player: Player = PlayerController().create_player()
             PlayerController().save_player(new_player)
             players_list.append(new_player)
@@ -119,17 +135,23 @@ class TournamentController:
         return tournament
 
     def _retrieve_scores(self, tournament: Tournament) -> Tournament:
-        for round in range(tournament.number_of_rounds):
-            curent_round = getattr(tournament, f"round_{round+1}")
+        for index in range(tournament.number_of_rounds):
+            curent_round = getattr(tournament, f"round_{index+1}")
             for match in range(len(curent_round.list_matchs)):
                 curent_match = getattr(curent_round, f"match_{match+1}")
-                if View().get_result_match(curent_match) == "joueur 1":
-                    getattr(curent_match, f"match_{match+1}")
-                    # TODO: poursuivre ici
+                result = View().get_result_match(curent_match)
+                if result == "joueur 1":
+                    curent_match.score_player_one += 1
+                elif result == "joueur 2":
+                    curent_match.score_player_two += 1
+                else:
+                    curent_match.score_player_one += 0.5
+                    curent_match.score_player_two += 0.5
         return tournament
 
-
-    def run_new_tournament(self):
+    def run_new_tournament(self, player_controller):
+        View().print_players_list(player_controller)
+        # TODO: récupérer le choix des joueurs et générer la liste avant la création du tournoi
         new_tournament = self._create_tournament()
         tournament_ready = self._generate_matchs(new_tournament)
         tournament_finish = self._retrieve_scores(tournament_ready)

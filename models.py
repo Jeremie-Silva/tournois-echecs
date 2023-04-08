@@ -2,7 +2,7 @@ class Player:
 	def __init__(self, name: str, last_name: str, birth_date: str) -> None:
 		self.name: str = name
 		self.last_name: str = last_name
-		self.birth_date: str = "birth_date"
+		self.birth_date: str = birth_date
 	def __str__(self):
 		return f"  Nom : {self.name} \n  Prénom : {self.last_name}\n  Date de naissance : {self.birth_date}\n"
 
@@ -31,7 +31,7 @@ class Match:
 		self.match_name = match_name
 		self.player_one = player_one
 		self.player_two = player_two
-		self.score_player_one = 0
-		self.score_player_two = 0
+		self.score_player_one: float = 0
+		self.score_player_two: float = 0
 		self.match_result = ([player_one, self.score_player_one], [player_two, self.score_player_two])
 
