@@ -1,6 +1,6 @@
 import json
 from boltons.iterutils import chunked
-from random import shuffle
+from random import shuffle, randint
 from models import (
     Player,
     Tournament,
@@ -50,13 +50,10 @@ class PlayerController:
         with open('Data/players.json', 'w') as json_player_file:
             json.dump(data_players, json_player_file)
 
-    def create_player(self) -> Player:
+    def _create_player(self) -> Player:
         name = View().get_information_user("Nom du joueur")
         last_name = View().get_information_user("Prénom du joueur")
         birth_date = View().get_information_user("Date de naissance du joueur (exemple: 24122023)", data_type="day_date")
-        # name = "playername"
-        # last_name = "playerlastname"
-        # birth_date = "playerbirthdate"
         new_player = Player(
             name=name,
             last_name=last_name,
@@ -75,19 +72,20 @@ class PlayerController:
                 player.last_name,
                 player.birth_date
             )
+        print("---JOUEUR sauvegardé---")
         return True
 
     def add_new_player(self) -> None:
-        new_player = self.create_player()
+        new_player = self._create_player()
         self.save_player(new_player)
         with open('Data/players.json', 'r') as json_player_file:
             data_players = json.load(json_player_file)
-        setattr(self, f"player_{len(data_players)-1}",new_player)
+        setattr(self, f"player_{len(data_players)-1}", new_player)
 
 
 class TournamentController:
 
-    def _create_tournament(self) -> Tournament:
+    def _create_tournament(self, player_controller) -> Tournament:
         # name: str = View().get_information_user("Nom du tournoi")
         # place: str = View().get_information_user("Lieu du tournoi")
         # date_start: str = View().get_information_user("date de début du tournoi", data_type="day_date")
@@ -95,14 +93,14 @@ class TournamentController:
         # description: str = View().get_information_user("description du tournoi")
         # number_of_rounds: int = View().get_information_user("nombre de rounds", data_type="integer")
         # players_count: int = View().get_information_user("Nombre de joueurs", data_type="integer")
-        name: str = "name"
-        place: str = "place"
-        date_start: str = "date_start"
-        date_end: str = "date_end"
-        description: str = "description"
-        number_of_rounds: int = 4
-        players_count: int = 2
-        players_list: list[Player] = self._create_players_list(players_count)
+        name: str = "name553"
+        place: str = "place355"
+        date_start: str = "date_start5353"
+        date_end: str = "date_end5353"
+        description: str = "description5313"
+        number_of_rounds: int = randint(1,6)
+        players_count: int = randint(2,6)
+        players_list: list[Player] = self._create_players_list(players_count, player_controller)
         new_tournament = Tournament(
             name=name,
             place=place,
@@ -115,30 +113,33 @@ class TournamentController:
         )
         return new_tournament
 
-    def _create_players_list(self, players_count) -> list[Player]:
+    def _create_players_list(self, players_count, player_controller) -> list[Player]:
         players_list: list[Player] = []
+        View().print_players_list(player_controller)
         for i in range(players_count):
-            # TODO: afficher la liste des joueurs en mémoire avec la vue
-            new_player: Player = PlayerController().create_player()
-            PlayerController().save_player(new_player)
-            players_list.append(new_player)
+            # index_player = View().get_information_user("Numéro du joueur (taper 0 pour ajouter un nouveau joueur)", data_type="integer")
+            index_player = randint(1,15)
+            if index_player == 0:
+                player_controller.add_new_player()
+                View().print_players_list(player_controller)
+                index_player = View().get_information_user("Numéro du joueur", data_type="integer")
+            player_selected = getattr(player_controller, f"player_{index_player}")
+            players_list.append(player_selected)
         return players_list
 
     def _generate_matchs(self, tournament) -> Tournament:
-        current_round = 1
         for round in range(tournament.number_of_rounds):
-            round_name = f"round_{current_round}"
+            round_name = f"round_{round + 1}"
             new_round = RoundController().create_round(round_name, tournament.players_list)
             setattr(tournament, round_name, new_round)
             RoundController().create_matchs(getattr(tournament, round_name))
-            current_round += 1
         return tournament
 
     def _retrieve_scores(self, tournament: Tournament) -> Tournament:
-        for index in range(tournament.number_of_rounds):
-            curent_round = getattr(tournament, f"round_{index+1}")
-            for match in range(len(curent_round.list_matchs)):
-                curent_match = getattr(curent_round, f"match_{match+1}")
+        for index_round in range(tournament.number_of_rounds):
+            curent_round = getattr(tournament, f"round_{index_round+1}")
+            for index_match in range(len(curent_round.list_matchs)):
+                curent_match = getattr(curent_round, f"match_{index_match+1}")
                 result = View().get_result_match(curent_match)
                 if result == "joueur 1":
                     curent_match.score_player_one += 1
@@ -150,17 +151,69 @@ class TournamentController:
         return tournament
 
     def run_new_tournament(self, player_controller):
-        View().print_players_list(player_controller)
-        # TODO: récupérer le choix des joueurs et générer la liste avant la création du tournoi
-        new_tournament = self._create_tournament()
+        new_tournament = self._create_tournament(player_controller)
         tournament_ready = self._generate_matchs(new_tournament)
         tournament_finish = self._retrieve_scores(tournament_ready)
+        self.save_tournament(tournament_finish)
+
+    def save_tournament(self, tournament):
+        with open('Data/tournaments.json', 'r') as json_tournament_file:
+            data_tournament = json.load(json_tournament_file)
+
+        identify = len(data_tournament) + 1
+
+        data_tournament[f"tournament_{identify}"] = {
+            "name": tournament.name,
+            "place": tournament.place,
+            "date start": tournament.date_start,
+            "date end": tournament.date_end,
+            "description": tournament.description,
+            "players count": tournament.players_count,
+            "players list": {},
+            "number of rounds": tournament.number_of_rounds,
+        }
+
+        for player_index in range(len(tournament.players_list)):
+            data_tournament[f"tournament_{identify}"]["players list"][f"player {player_index+1}"] = {
+                "name": tournament.players_list[player_index].name,
+                "last name": tournament.players_list[player_index].last_name,
+                "birth date": tournament.players_list[player_index].birth_date
+            }
+
+        for round_index in range(tournament.number_of_rounds):
+            roud_data = {}
+            curent_round = getattr(tournament, f"round_{round_index+1}")
+            data_tournament[f"tournament_{identify}"][f"round {round_index+1}"] = {
+                "round name": curent_round.round_name,
+            }
+            for match_index in range(len(curent_round.list_matchs)):
+                curent_match = getattr(curent_round, f"match_{match_index+1}")
+                data_tournament[f"tournament_{identify}"][f"round {round_index+1}"][f"match {match_index+1}"] = {
+                    "match name": curent_match.match_name,
+                    "player one": {
+                        "name": curent_match.player_one.name,
+                        "last name": curent_match.player_one.last_name,
+                        "birth date": curent_match.player_one.birth_date
+                    },
+                    "player two": {
+                        "name": curent_match.player_two.name,
+                        "last name": curent_match.player_two.last_name,
+                        "birth date": curent_match.player_two.birth_date
+                    },
+                    "score player one": curent_match.score_player_one,
+                    "score player two": curent_match.score_player_two,
+                }
+
+        with open('Data/tournaments.json', 'w') as json_tournament_file:
+            json.dump(data_tournament, json_tournament_file)
+        return True
 
 
 class RoundController:
 
     def create_round(self, round_name: str, players_list: list[Player]) -> Round:
         shuffle(players_list)
+        # TODO: debug ici
         list_matches = [tuple(match) for match in chunked(players_list, 2)]
         return Round(round_name, players_list, list_matches)
 
