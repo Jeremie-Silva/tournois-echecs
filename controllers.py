@@ -7,83 +7,52 @@ from models import (
     Round,
     Match
 )
+from utils import file_opener, file_writer
 from views import View
 
 
 class PlayerController:
 
-    def instantiate_players_from_json(self) -> None:
-        with open('Data/players.json', 'r') as json_player_file:
-            data_players = json.load(json_player_file)
-        for player, value in data_players.items():
-            setattr(self, player, Player(
-                value['name'], value['last name'], value['birth date'])
-            )
+    def __init__(self):
+        self._load_players_from_json()
 
-    def _player_is_in_json_dataset(self, name: str, last_name: str, birth_date: str) -> bool:
-        """Check with 3 parameters if the new player instance is already exist
-         in the json dataset.
-        """
-        with open('Data/players.json', 'r') as json_player_file:
-            data_players = json.load(json_player_file)
-        for i in range(0, len(data_players)):
-            if (name == data_players[f"player_{i}"]["name"] and
-                    last_name == data_players[f"player_{i}"]["last name"] and
-                    birth_date == data_players[f"player_{i}"]["birth date"]):
-                return True
-        return False
-
-    def _export_player_to_json_file(self, name: str, last_name: str, birth_date: str) -> None:
-        """Copy the json file in a local dictionary for add a new player
-        and resend the new dict into the json file.
-        Create an incremental name.
-        """
-        with open('Data/players.json', 'r') as json_player_file:
-            data_players = json.load(json_player_file)
-
-        identify = len(data_players)
-        data_players[f"player_{identify}"] = {
-            "name": name,
-            "last name": last_name,
-            "birth date": birth_date
-        }
-        with open('Data/players.json', 'w') as json_player_file:
-            json.dump(data_players, json_player_file)
+    def _load_players_from_json(self) -> None:
+        data = file_opener("players")
+        for player, value in data.items():
+            setattr(self, player, Player(value['name'], value['last_name'], value['birth_date']))
 
     def _create_player(self) -> Player:
         name = View().get_information_user("Nom du joueur")
         last_name = View().get_information_user("Prénom du joueur")
-        birth_date = View().get_information_user("Date de naissance du joueur (exemple: 24122023)", data_type="day_date")
-        new_player = Player(
-            name=name,
-            last_name=last_name,
-            birth_date=birth_date
-        )
-        return new_player
+        birth_date = View().get_information_user("Date de naissance du joueur", data_type="day_date")
+        return Player(name=name, last_name=last_name, birth_date=birth_date)
 
-    def save_player(self, player: Player) -> bool:
-        if not self._player_is_in_json_dataset(
-            player.name,
-            player.last_name,
-            player.birth_date
-        ):
-            self._export_player_to_json_file(
-                player.name,
-                player.last_name,
-                player.birth_date
-            )
-        print("---JOUEUR sauvegardé---")
-        return True
+    def _save_player_to_json(self, player: Player) -> None:
+        """Copy the json file in a local dictionary for add a new player
+        and resend the new dict into the json file.
+        Create an incremental name.
+        """
+        data = file_opener("players")
+        identify = len(data)
+        data[f"player_{identify}"] = player.__dict__
+        file_writer("players", data)
 
     def add_new_player(self) -> None:
         new_player = self._create_player()
-        self.save_player(new_player)
-        with open('Data/players.json', 'r') as json_player_file:
-            data_players = json.load(json_player_file)
-        setattr(self, f"player_{len(data_players)-1}", new_player)
+        self._save_player_to_json(new_player)
+        self._load_players_from_json()
 
+    def convert_to_dict(self):
+        return json.dumps({key: value.__dict__ for key, value in vars(self).items()})
 
 class TournamentController:
+
+    def __init__(self):
+        self._load_tournaments_from_json()
+
+    def _load_tournaments_from_json(self):
+        pass
+        # TODO: à implementer comme pour playercontroller
 
     def _create_tournament(self, player_controller) -> Tournament:
         # name: str = View().get_information_user("Nom du tournoi")
@@ -118,7 +87,7 @@ class TournamentController:
         View().print_players_list(player_controller)
         for i in range(players_count):
             # index_player = View().get_information_user("Numéro du joueur (taper 0 pour ajouter un nouveau joueur)", data_type="integer")
-            index_player = randint(1,15)
+            index_player = randint(1,14)
             if index_player == 0:
                 player_controller.add_new_player()
                 View().print_players_list(player_controller)
@@ -139,15 +108,18 @@ class TournamentController:
         for index_round in range(tournament.number_of_rounds):
             curent_round = getattr(tournament, f"round_{index_round+1}")
             for index_match in range(len(curent_round.list_matchs)):
-                curent_match = getattr(curent_round, f"match_{index_match+1}")
-                result = View().get_result_match(curent_match)
-                if result == "joueur 1":
-                    curent_match.score_player_one += 1
-                elif result == "joueur 2":
-                    curent_match.score_player_two += 1
-                else:
-                    curent_match.score_player_one += 0.5
-                    curent_match.score_player_two += 0.5
+                try:
+                    curent_match = getattr(curent_round, f"match_{index_match+1}")
+                    result = View().get_result_match(curent_match)
+                    if result == "joueur 1":
+                        curent_match.score_player_one += 1
+                    elif result == "joueur 2":
+                        curent_match.score_player_two += 1
+                    else:
+                        curent_match.score_player_one += 0.5
+                        curent_match.score_player_two += 0.5
+                except:
+                    pass
         return tournament
 
     def run_new_tournament(self, player_controller):
@@ -157,12 +129,11 @@ class TournamentController:
         self.save_tournament(tournament_finish)
 
     def save_tournament(self, tournament):
-        with open('Data/tournaments.json', 'r') as json_tournament_file:
-            data_tournament = json.load(json_tournament_file)
-
-        identify = len(data_tournament) + 1
-
-        data_tournament[f"tournament_{identify}"] = {
+        data = file_opener("tournaments")
+        identify = len(data) + 1
+        # TODO: refactoring avec vars(self).items()
+        # TODO: mettre des tirets du 8 -> _
+        data[f"tournament {identify}"] = {
             "name": tournament.name,
             "place": tournament.place,
             "date start": tournament.date_start,
@@ -174,46 +145,49 @@ class TournamentController:
         }
 
         for player_index in range(len(tournament.players_list)):
-            data_tournament[f"tournament_{identify}"]["players list"][f"player {player_index+1}"] = {
+            data[f"tournament {identify}"]["players list"][f"player {player_index+1}"] = {
                 "name": tournament.players_list[player_index].name,
-                "last name": tournament.players_list[player_index].last_name,
-                "birth date": tournament.players_list[player_index].birth_date
+                "last_name": tournament.players_list[player_index].last_name,
+                "birth_date": tournament.players_list[player_index].birth_date
             }
 
         for round_index in range(tournament.number_of_rounds):
-            roud_data = {}
+            round_data = {}
             curent_round = getattr(tournament, f"round_{round_index+1}")
-            data_tournament[f"tournament_{identify}"][f"round {round_index+1}"] = {
+            data[f"tournament {identify}"][f"round {round_index+1}"] = {
                 "round name": curent_round.round_name,
             }
             for match_index in range(len(curent_round.list_matchs)):
-                curent_match = getattr(curent_round, f"match_{match_index+1}")
-                data_tournament[f"tournament_{identify}"][f"round {round_index+1}"][f"match {match_index+1}"] = {
-                    "match name": curent_match.match_name,
-                    "player one": {
-                        "name": curent_match.player_one.name,
-                        "last name": curent_match.player_one.last_name,
-                        "birth date": curent_match.player_one.birth_date
-                    },
-                    "player two": {
-                        "name": curent_match.player_two.name,
-                        "last name": curent_match.player_two.last_name,
-                        "birth date": curent_match.player_two.birth_date
-                    },
-                    "score player one": curent_match.score_player_one,
-                    "score player two": curent_match.score_player_two,
-                }
-
-        with open('Data/tournaments.json', 'w') as json_tournament_file:
-            json.dump(data_tournament, json_tournament_file)
+                try:
+                    curent_match = getattr(curent_round, f"match_{match_index+1}")
+                    data[f"tournament {identify}"][f"round {round_index+1}"][f"match {match_index+1}"] = {
+                        "match name": curent_match.match_name,
+                        "player one": {
+                            "name": curent_match.player_one.name,
+                            "last_name": curent_match.player_one.last_name,
+                            "birth_date": curent_match.player_one.birth_date
+                        },
+                        "player two": {
+                            "name": curent_match.player_two.name,
+                            "last_name": curent_match.player_two.last_name,
+                            "birth_date": curent_match.player_two.birth_date
+                        },
+                        "score player one": curent_match.score_player_one,
+                        "score player two": curent_match.score_player_two,
+                    }
+                except:
+                    pass
+        file_writer("tournaments", data)
         return True
 
+    def convert_to_dict(self):
+        pass
+        # TODO: à implementer comme pour playercontroller
 
 class RoundController:
 
     def create_round(self, round_name: str, players_list: list[Player]) -> Round:
         shuffle(players_list)
-        # TODO: debug ici
         list_matches = [tuple(match) for match in chunked(players_list, 2)]
         return Round(round_name, players_list, list_matches)
 
@@ -221,6 +195,9 @@ class RoundController:
         current_match = 1
         for match in round.list_matchs:
             match_name = f"match_{current_match}"
-            new_match = Match(match_name, match[0], match[1])
-            setattr(round, match_name, new_match)
+            try:
+                new_match = Match(match_name, match[0], match[1])
+                setattr(round, match_name, new_match)
+            except:
+                pass
         return round

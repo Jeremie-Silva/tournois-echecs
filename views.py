@@ -1,18 +1,21 @@
 import datetime
+from random import randint
 from typing import Literal
 from models import Match
 
-MENU_CHOICES: list[int] = [1, 2]
+MENU_CHOICES: list[int] = [0, 1, 2]
 
 
 class View:
 
     def main_menu(self) -> None:
-        input_choice = 0
+        input_choice = 99999
         while int(input_choice) not in MENU_CHOICES:
-            print("-------------------------------------")
+            self.print_title("MENU")
             print("Voici la liste des choix possible :")
-            print("1 : Enregistrer un nouveau TOURNOI")
+            print("1 : Enregistrer un nouveau JOUEUR")
+            print("2 : Enregistrer un nouveau TOURNOI")
+            print("0 : Quitter")
             try:
                 input_choice = int(input("Veuillez saisir un chiffre : "))
                 if input_choice in MENU_CHOICES:
@@ -23,10 +26,6 @@ class View:
                 print("-Erreur- Format invalide")
         print(" Choix valide !")
         print("-------------------------------------")
-        if input_choice == 1:
-            print("Création de JOUEUR :")
-        elif input_choice == 2:
-            print("Création du TOURNOI :")
         return input_choice
 
     def get_information_user(self, message: str, data_type: Literal["string", "day_date", "integer"] = "string") -> str|int:
@@ -74,16 +73,16 @@ class View:
         return input_value
 
     def get_result_match(self, match: Match):
-        input_choice = 0
-        while int(input_choice) != 1 or int(input_choice) != 2:
-            print(f"-----{match.match_name.upper()}-----\n")
-            print("JOUEUR 1 : tapez 1")
+        while True:
+            self.print_title(match.match_name.upper())
+            print("JOUEUR 1 (taper 1)")
             print(match.player_one)
-            print("JOUEUR 2 : tapez 2")
+            print("JOUEUR 2 (taper 2)")
             print(match.player_two)
-            print("MATCH NUL : tapez 0 \n")
+            print("MATCH NUL (taper 0) \n")
             try:
-                input_choice = int(input("Veuillez saisir le resultat : "))
+                input_choice = randint(0, 2)
+                # input_choice = int(input("Veuillez saisir le resultat : "))
                 if input_choice == 0 or input_choice == 1 or input_choice == 2:
                     break
                 else:
@@ -99,7 +98,15 @@ class View:
         else:
             return "nul"
 
-    def print_players_list(player_controller):
-        for key in vars(player_controller):
-            print(key)
-            print(vars(player_controller)[key])
+    def print_players_list(self, player_controller):
+        for key, value in vars(player_controller).items():
+            if key != 'player_0':
+                print(key)
+                print(value)
+
+    def print_title(self, title):
+        len_title = 40
+        symbol = "-"
+        print("\n"+symbol*len_title)
+        print(symbol*int(len_title/2-len(title)/2)+title+symbol*int(len_title/2-len(title)/2))
+        print(symbol*len_title+"\n")
