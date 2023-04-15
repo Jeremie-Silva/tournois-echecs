@@ -8,8 +8,8 @@ from views import View
 def app_running():
     player_controller = PlayerController()
     tournament_controller = TournamentController()
-    input_choice = View().main_menu()
-    # input_choice = 2
+    # input_choice = View().main_menu()
+    input_choice = 2
     if input_choice == 1:
         View().print_title("Création de JOUEUR")
         player_controller.add_new_player()
@@ -18,6 +18,8 @@ def app_running():
         View().print_title("Création de TOURNOI")
         tournament_controller.run_new_tournament(player_controller)
         View().print_title("Tournoi terminé")
+        x = tournament_controller.convert_to_dict()
+        print(x)
     elif input_choice == 0:
         return False
     return True

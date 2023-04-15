@@ -52,7 +52,12 @@ class TournamentController:
 
     def _load_tournaments_from_json(self):
         pass
-        # TODO: à implementer comme pour playercontroller
+        # data = file_opener("tournaments")
+        # for tournament, value in data.items():
+        #     setattr(self, tournament, Tournament(
+        #         name=value['name'], place=value['place'], date_start=value['date start'],
+        #         date_end=value['date end']
+        #     ))
 
     def _create_tournament(self, player_controller) -> Tournament:
         # name: str = View().get_information_user("Nom du tournoi")
@@ -128,6 +133,10 @@ class TournamentController:
         tournament_finish = self._retrieve_scores(tournament_ready)
         self.save_tournament(tournament_finish)
 
+        data = file_opener("tournaments")
+        identify = len(data)
+        setattr(self, f"tournament_{identify}", tournament_finish)
+
     def save_tournament(self, tournament):
         data = file_opener("tournaments")
         identify = len(data) + 1
@@ -181,8 +190,12 @@ class TournamentController:
         return True
 
     def convert_to_dict(self):
-        pass
-        # TODO: à implementer comme pour playercontroller
+        x = {}
+        for name, tournament in vars(self).items():
+            x[name]= tournament.__dict__
+            tournament.players_list = [player.__dict__ for player in tournament.players_list]
+            # TODO: convertir les rounds en dict
+        return x
 
 class RoundController:
 
@@ -201,3 +214,6 @@ class RoundController:
             except:
                 pass
         return round
+
+    def convert_to_dict(self):
+        pass
