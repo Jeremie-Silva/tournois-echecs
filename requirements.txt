@@ -3,5 +3,5 @@
 #TODO: methode privées/publics
 #TODO: dosctrings
 #TODO: typing final
-#TODO : codingstyle
-#TODO : tests ?
+#TODO: codingstyle
+#TODO: tests ?

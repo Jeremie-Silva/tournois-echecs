@@ -1,0 +1,100 @@
+from unittest import TestCase
+from unittest.mock import patch, mock_open
+
+from app.controllers import (
+	PlayerController, TournamentController,
+)
+from app.models import Player
+from app.utils import object_to_dict
+
+
+class PlayerControllerTestCase(TestCase):
+
+	def setUp(self):
+		self.player_controller = PlayerController()
+
+	# PlayerController()
+
+	def test_player_controller_is_defined(self):
+		self.assertIsInstance(self.player_controller, PlayerController)
+
+	# PlayerController._load_players_from_json()
+
+	@patch("app.controllers.file_opener")
+	def test_player_controller_load_players_from_json(self, mock_file_opener):
+		test_data = {
+			"player_0": {
+				"name": "Test Name", "last_name": "Test Last Name", "birth_date": "2000-01-01"
+			},
+			"player_1": {
+				"name": "Test Name", "last_name": "Test Last Name", "birth_date": "2000-01-02", "custom_key": "custom_value"
+			}
+		}
+		mock_file_opener.return_value = test_data
+		player_controller = PlayerController()
+		self.assertEqual(
+			object_to_dict(player_controller.player_0),
+			{"name": "Test Name", "last_name": "Test Last Name", "birth_date": "2000-01-01"}
+		)
+		self.assertEqual(
+			object_to_dict(player_controller.player_1),
+			{"name": "Test Name", "last_name": "Test Last Name", "birth_date": "2000-01-02", "custom_key": "custom_value"}
+		)
+
+	# PlayerController._create_player()
+
+	@patch("app.controllers.PlayerController._load_players_from_json")
+	@patch("app.controllers.PlayerController._save_player_to_json")
+	@patch("app.views.View.get_information_user")
+	def test_player_controller_create_player_from_json(self, mock_get_info, mock_save, mock_load):
+		mock_get_info.side_effect = ["name", "last_name", "birth_date"]
+		player_controller = PlayerController()
+		player_controller.create_player()
+		self.assertEqual(mock_get_info.call_count, 3)
+		self.assertEqual(type(mock_save.call_args_list[0].args[0]), Player)
+		self.assertEqual(mock_load.call_count, 2)
+
+	# PlayerController._save_player_to_json()
+
+	@patch("app.controllers.PlayerController._load_players_from_json")
+	@patch("app.controllers.file_writer")
+	@patch("app.controllers.file_opener")
+	def test_player_controller_save_player_to_json(self, mock_file_opener, mock_file_writer, mock_load):
+		data = {
+			"player_0": {"birth_date": "1111-11-11", "last_name": "admin", "name": "admin"},
+			"player_1": {"birth_date": "1993-03-28", "last_name": "Jeremie", "name": "Silva"},
+			"player_2": {"birth_date": "1992-05-19", "last_name": "Christopher", "name": "Portugal"},
+			"player_3": {"birth_date": "1991-08-31", "last_name": "Lucy", "name": "Buret"},
+		}
+		new_player = Player(
+			name="Clavier",
+			last_name="Christian",
+			birth_date="1990-20-10"
+		)
+		expected_value = {
+			"player_0": {"birth_date": "1111-11-11", "last_name": "admin", "name": "admin"},
+			"player_1": {"birth_date": "1993-03-28", "last_name": "Jeremie", "name": "Silva"},
+			"player_2": {"birth_date": "1992-05-19", "last_name": "Christopher", "name": "Portugal"},
+			"player_3": {"birth_date": "1991-08-31", "last_name": "Lucy", "name": "Buret"},
+			"player_4": {"birth_date": "1990-20-10", "last_name": "Christian", "name": "Clavier"},
+		}
+		mock_file_opener.return_value = data
+		mock_custom = mock_open()
+		with patch("builtins.open", mock_custom):
+			PlayerController()._save_player_to_json(new_player)
+		self.assertEqual(mock_file_writer.call_args_list[0].args[1], expected_value)
+
+
+class TournamentControllerTestCase(TestCase):
+
+	def setUp(self):
+		self.tournament_controller = TournamentController()
+
+	# TournamentController()
+
+	def test_tournament_controller_is_defined(self):
+		self.assertIsInstance(self.tournament_controller, TournamentController)
+
+	# TournamentController._load_tournaments_from_json()
+
+	# TODO: reprendre ici

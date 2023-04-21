@@ -1,7 +1,7 @@
 import datetime
 from random import randint
 from typing import Literal
-from models import Match
+from app.models import Match
 
 MENU_CHOICES: list[int] = [0, 1, 2]
 
