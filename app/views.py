@@ -28,7 +28,7 @@ class View:
         print("-------------------------------------")
         return input_choice
 
-    def get_information_user(self, message: str, data_type: Literal["string", "day_date", "integer"] = "string") -> str|int:
+    def get_information_user(self, message: str, data_type: Literal["string", "birth_date", "integer"] = "string") -> str|int:
         """Ask the information from the user,
         print a custom message,
         checks the validity and return it
@@ -45,7 +45,7 @@ class View:
                         break
                 except ValueError:
                     pass
-            elif data_type == "day_date":
+            elif data_type == "birth_date":
                 print(f"{message} : ")
                 try:
                     input_year = str(input("Année : "))

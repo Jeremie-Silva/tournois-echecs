@@ -1,3 +1,4 @@
+from datetime import datetime
 from random import shuffle, randint
 from app.models import (
     Player,
@@ -26,7 +27,7 @@ class PlayerController:
     def create_player(self):
         name = View().get_information_user("Nom du joueur")
         last_name = View().get_information_user("Prénom du joueur")
-        birth_date = View().get_information_user("Date de naissance du joueur", data_type="day_date")
+        birth_date = View().get_information_user("Date de naissance du joueur", data_type="birth_date")
         new_player = Player(name=name, last_name=last_name, birth_date=birth_date)
         self._save_player_to_json(new_player)
         self._load_players_from_json()
@@ -57,20 +58,12 @@ class TournamentController:
         #     ))
 
     def _create_tournament(self, player_controller) -> Tournament:
-        # name: str = View().get_information_user("Nom du tournoi")
-        # place: str = View().get_information_user("Lieu du tournoi")
-        # date_start: str = View().get_information_user("date de début du tournoi", data_type="day_date")
-        # date_end: str = View().get_information_user("date de fin du tournoi", data_type="day_date")
-        # description: str = View().get_information_user("description du tournoi")
-        # number_of_rounds: int = View().get_information_user("nombre de rounds", data_type="integer")
-        # players_count: int = View().get_information_user("Nombre de joueurs", data_type="integer")
-        name: str = "name553"
-        place: str = "place355"
-        date_start: str = "date_start5353"
-        date_end: str = "date_end5353"
-        description: str = "description5313"
-        number_of_rounds: int = randint(1,6)
-        players_count: int = randint(2,6)
+        name: str = View().get_information_user("Nom du tournoi")
+        place: str = View().get_information_user("Lieu du tournoi")
+        description: str = View().get_information_user("description du tournoi")
+        number_of_rounds: int = View().get_information_user("nombre de rounds", data_type="integer")
+        players_count: int = View().get_information_user("Nombre de joueurs", data_type="integer")
+        date_start: str = str(datetime.now())
         players_list: list[Player] = self._create_players_list(players_count, player_controller)
         new_tournament = Tournament(
             name=name,
@@ -84,16 +77,17 @@ class TournamentController:
         return new_tournament
 
     def _create_players_list(self, players_count, player_controller) -> list[Player]:
-        players_list: list[Player] = []
-        View().print_players_list(player_controller)
-        for i in range(players_count):
-            # index_player = View().get_information_user("Numéro du joueur (taper 0 pour ajouter un nouveau joueur)", data_type="integer")
-            index_player = randint(1,14)
+        def _select_player():
+            index_player = View().get_information_user("Numéro du joueur (taper 0 pour ajouter un nouveau joueur)", data_type="integer")
             if index_player == 0:
-                player_controller.add_new_player()
+                player_controller.create_player()
                 View().print_players_list(player_controller)
                 index_player = View().get_information_user("Numéro du joueur", data_type="integer")
-            player_selected = getattr(player_controller, f"player_{index_player}")
+            return getattr(player_controller, f"player_{index_player}")
+        players_list: list[Player] = []
+        View().print_players_list(player_controller)
+        for index in range(players_count):
+            player_selected = _select_player()
             players_list.append(player_selected)
         return players_list
 
@@ -131,9 +125,8 @@ class TournamentController:
         data = file_opener("tournaments")
         identify = len(data) + 1
         setattr(self, f"tournament_{identify}", tournament_finish)
-        print(self.convert_to_dict())
 
-    def save_tournament(self):
+    def save_tournament_to_json(self):
         data = file_opener("tournaments")
         # TODO: refactoring avec vars(self).items()
         # TODO: mettre des tirets du 8 -> _
