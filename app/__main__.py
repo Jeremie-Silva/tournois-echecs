@@ -7,7 +7,6 @@ def app_running():
     player_controller = PlayerController()
     tournament_controller = TournamentController()
     input_choice = MainView().main_menu()
-    # input_choice = 2
     if input_choice == 1:
         MainView().print_title("Création de JOUEUR")
         player_controller.create_player()

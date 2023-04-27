@@ -8,14 +8,14 @@ class TournamentTestCase(TestCase):
 
     def setUp(self):
         self.players_list = [
-			Player("Clavier", "Christian", "1990-20-10"),
-			Player("Reno", "Jean", "1990-20-10"),
-			Player("Astier", "Alexandre", "1990-20-10"),
-			Player("Naseri", "Sami", "1990-20-10"),
-			Player("Solo", "Bruno", "1990-20-10"),
-			Player("Le Bolloc'h", "Yvan", "1990-20-10"),
-			Player("Garcia", "José", "1990-20-10"),
-		]
+            Player("Clavier", "Christian", "1990-20-10"),
+            Player("Reno", "Jean", "1990-20-10"),
+            Player("Astier", "Alexandre", "1990-20-10"),
+            Player("Naseri", "Sami", "1990-20-10"),
+            Player("Solo", "Bruno", "1990-20-10"),
+            Player("Le Bolloc'h", "Yvan", "1990-20-10"),
+            Player("Garcia", "José", "1990-20-10"),
+        ]
         self.tournament = Tournament(
             name="nom du tournoi",
             place="lieu du tournoi",

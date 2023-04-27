@@ -4,6 +4,7 @@ from app.models.match import Match
 
 MENU_CHOICES: list[int] = [0, 1, 2]
 
+
 class MainView:
 
     def main_menu(self) -> None:
@@ -26,7 +27,9 @@ class MainView:
         print("-------------------------------------")
         return input_choice
 
-    def get_information_user(self, message: str, data_type: Literal["string", "birth_date", "integer"] = "string") -> str|int:
+    def get_information_user(
+            self, message: str, data_type: Literal["string", "birth_date", "integer"] = "string"
+    ) -> str | int:
         """Ask the information from the user,
         print a custom message,
         checks the validity and return it
@@ -50,9 +53,8 @@ class MainView:
                     input_month = str(input("Mois : "))
                     input_day = str(input("Jour : "))
                     if (input_year.isdigit() and len(input_year) == 4 and
-                        input_month.isdigit() and len(input_month) == 2 and int(input_month) <= 12 and
-                        input_day.isdigit() and len(input_day) == 2 and int(input_day) <= 31
-                    ):
+                            input_month.isdigit() and len(input_month) == 2 and int(input_month) <= 12 and
+                            input_day.isdigit() and len(input_day) == 2 and int(input_day) <= 31):
                         input_value = str(datetime.date(int(input_year), int(input_month), int(input_day)))
                         break
                 except ValueError:
@@ -61,7 +63,7 @@ class MainView:
                 try:
                     input_value = int(input(f"{message} : "))
                     if (str(input_value).isdigit() and len(str(input_value)) == 1 or
-		                    len(str(input_value)) == 2):
+                            len(str(input_value)) == 2):
                         break
                 except ValueError:
                     pass
