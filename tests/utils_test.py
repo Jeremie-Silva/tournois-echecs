@@ -1,17 +1,13 @@
 import json
-from unittest.mock import patch, mock_open, call
 from unittest import TestCase
-from app.utils import (
-	object_to_dict,
-	file_opener,
-	file_writer
-)
-from app.models import (
-	Player,
-	Tournament,
-	Round,
-	Match
-)
+from unittest.mock import patch, mock_open, call
+
+from app.models.round import Round
+from app.utils import object_to_dict, file_opener, file_writer
+from app.models.match import Match
+from app.models.player import Player
+from app.models.tournament import Tournament
+from app.models.match import Match
 
 
 class UtilsTestCase(TestCase):
@@ -24,7 +20,7 @@ class UtilsTestCase(TestCase):
 		with patch("builtins.open", mock):
 			result = file_opener("my_file")
 		self.assertEqual(result, mock_data)
-		mock.assert_called_once_with('../Data/my_file.json', 'r')
+		mock.assert_called_once_with('Data/my_file.json', 'r')
 
 	# utils.file_writer()
 
@@ -33,7 +29,7 @@ class UtilsTestCase(TestCase):
 		mock_custom = mock_open()
 		with patch("builtins.open", mock_custom):
 			file_writer("my_file", data)
-		mock_custom.assert_called_once_with('../Data/my_file.json', 'w')
+		mock_custom.assert_called_once_with('Data/my_file.json', 'w')
 		expected_calls = [call("{"), call('"data"'), call(': '), call('"test"'), call("}")]
 		mock_custom().write.assert_has_calls(expected_calls)
 
@@ -139,51 +135,6 @@ class UtilsTestCase(TestCase):
 			Player("Garcia", "José", "1990-20-10"),
 		]
 		expected_output_round_dict = {
-			"match_1": {
-				"match_name": "match_1",
-				"player_one": {
-					"birth_date": "1990-20-10",
-					"last_name": "Christian",
-					"name": "Clavier"
-				},
-				"player_two": {
-					"birth_date": "1990-20-10",
-					"last_name": "Jean",
-					"name": "Reno"
-				},
-				"score_player_one": 0,
-				"score_player_two": 0
-			},
-			"match_2": {
-				"match_name": "match_2",
-				"player_one": {
-					"birth_date": "1990-20-10",
-					"last_name": "Alexandre",
-					"name": "Astier"
-				},
-				"player_two": {
-					"birth_date": "1990-20-10",
-					"last_name": "Sami",
-					"name": "Naseri"
-				},
-				"score_player_one": 0,
-				"score_player_two": 0
-			},
-			"match_3": {
-				"match_name": "match_3",
-				"player_one": {
-					"birth_date": "1990-20-10",
-					"last_name": "Bruno",
-					"name": "Solo"
-				},
-				"player_two": {
-					"birth_date": "1990-20-10",
-					"last_name": "Yvan",
-					"name": "Le Bolloc'h"
-				},
-				"score_player_one": 0,
-				"score_player_two": 0
-			},
 			"players_list": [
 				{
 					"name": "Clavier",

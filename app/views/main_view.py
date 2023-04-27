@@ -1,12 +1,10 @@
 import datetime
-from random import randint
 from typing import Literal
-from app.models import Match
+from app.models.match import Match
 
 MENU_CHOICES: list[int] = [0, 1, 2]
 
-
-class View:
+class MainView:
 
     def main_menu(self) -> None:
         input_choice = 99999
@@ -41,7 +39,7 @@ class View:
             if data_type == "string":
                 try:
                     input_value = str(input(f"{message} : "))
-                    if input_value.isalpha() and len(input_value) < 100:
+                    if all(char.isalpha() or char.isspace() for char in input_value) and len(input_value) < 100:
                         break
                 except ValueError:
                     pass
@@ -81,8 +79,7 @@ class View:
             print(match.player_two)
             print("MATCH NUL (taper 0) \n")
             try:
-                input_choice = randint(0, 2)
-                # input_choice = int(input("Veuillez saisir le resultat : "))
+                input_choice = int(input("Veuillez saisir le resultat : "))
                 if input_choice == 0 or input_choice == 1 or input_choice == 2:
                     break
                 else:

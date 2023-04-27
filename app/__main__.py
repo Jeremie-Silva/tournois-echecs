@@ -1,23 +1,21 @@
-from app.controllers import (
-    TournamentController,
-    PlayerController
-)
-from app.views import View
+from app.controllers.tournament_controller import TournamentController
+from app.controllers.player_controller import PlayerController
+from app.views.main_view import MainView
 
 
 def app_running():
     player_controller = PlayerController()
     tournament_controller = TournamentController()
-    input_choice = View().main_menu()
+    input_choice = MainView().main_menu()
     # input_choice = 2
     if input_choice == 1:
-        View().print_title("Création de JOUEUR")
-        player_controller.add_new_player()
-        View().print_title("Joueur crée")
+        MainView().print_title("Création de JOUEUR")
+        player_controller.create_player()
+        MainView().print_title("Joueur crée")
     elif input_choice == 2:
-        View().print_title("Création de TOURNOI")
+        MainView().print_title("Création de TOURNOI")
         tournament_controller.run_new_tournament(player_controller)
-        View().print_title("Tournoi terminé")
+        MainView().print_title("Tournoi terminé")
     elif input_choice == 0:
         return False
     return True

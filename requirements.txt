@@ -1,7 +1,9 @@
+#TODO: walrus
+#TODO: match case
 #TODO: register dependencies
 #TODO: refactor boucles for en comprehension de liste
 #TODO: methode privées/publics
 #TODO: dosctrings
 #TODO: typing final
 #TODO: codingstyle
-#TODO: tests ?
+#TODO: finir les tests
