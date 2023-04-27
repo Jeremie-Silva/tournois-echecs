@@ -2,3 +2,5 @@
 # Tournois-echecs : OC - Project 4
 ---
 flake8 --format=html --htmldir=flake8_report app
+
+pytest --cov=app & coverage html
