@@ -20,7 +20,7 @@ class RoundControllerTestCase(TestCase):
 
     # RoundController.generate_rounds()
 
-    @patch("app.controllers.match_controller.MatchController._retrieve_scores_round")
+    @patch("app.controllers.match_controller.MatchController.retrieve_scores_round")
     @patch("app.controllers.round_controller.RoundController._generate_matchs")
     def test_round_controller_generate_rounds(self, mock_generate_matchs, mock_score):
         players_list = [

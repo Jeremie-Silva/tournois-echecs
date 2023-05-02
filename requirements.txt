@@ -6,3 +6,4 @@
 #TODO: dosctrings
 #TODO: typing final
 #TODO: finir les tests
+#TODO: enlever le mode debug

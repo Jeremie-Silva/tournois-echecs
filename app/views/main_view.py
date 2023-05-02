@@ -2,18 +2,19 @@ import datetime
 from typing import Literal
 from app.models.match import Match
 
-MENU_CHOICES: list[int] = [0, 1, 2]
+MENU_CHOICES: list[int] = [0, 1, 2, 3]
 
 
 class MainView:
 
-    def main_menu(self) -> None:
+    def main_menu(self) -> int:
         input_choice = 99999
         while int(input_choice) not in MENU_CHOICES:
             self.print_title("MENU")
             print("Voici la liste des choix possible :")
             print("1 : Enregistrer un nouveau JOUEUR")
             print("2 : Enregistrer un nouveau TOURNOI")
+            print("3 : Afficher infos")
             print("0 : Quitter")
             try:
                 input_choice = int(input("Veuillez saisir un chiffre : "))

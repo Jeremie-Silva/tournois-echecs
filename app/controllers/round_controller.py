@@ -85,6 +85,6 @@ class RoundController:
             new_round.date_start = str(datetime.now())
             setattr(tournament, round_name, new_round)
             tournament_ready = self._generate_matchs(tournament)
-            MatchController()._retrieve_scores_round(getattr(tournament, round_name))
+            MatchController().retrieve_scores_round(getattr(tournament, round_name))
             setattr(getattr(tournament, round_name), "date_end", str(datetime.now()))
         return tournament_ready

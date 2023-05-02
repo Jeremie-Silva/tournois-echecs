@@ -35,7 +35,7 @@ class MatchControllerTestCase(TestCase):
         setattr(round_1, "match_2",	Match("match_2", players_list[2], players_list[3]))
         setattr(round_1, "match_3",	Match("match_3", players_list[4], players_list[5]))
         mock_get_result.side_effect = ["joueur 1", "joueur 2", "autre"]
-        self.match_controller._retrieve_scores_round(round_1)
+        self.match_controller.retrieve_scores_round(round_1)
         self.assertEqual(round_1.match_1.score_player_one, 1)
         self.assertEqual(round_1.match_1.score_player_two, 0)
         self.assertEqual(round_1.match_2.score_player_one, 0)

@@ -3,7 +3,7 @@ from app.views.main_view import MainView
 
 class MatchController:
 
-    def _retrieve_scores_round(self, round):
+    def retrieve_scores_round(self, round):
         match_index = 1
         while True:
             match_name = f"match_{match_index}"

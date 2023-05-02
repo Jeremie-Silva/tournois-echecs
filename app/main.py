@@ -18,10 +18,11 @@ def app_running():
         tournament_controller.run_new_tournament(player_controller)
         MainView().print_title("Tournoi terminé")
     elif input_choice == 3:
-        FlaskView()
+        FlaskView("players_sorted_by_name")
     elif input_choice == 0:
         return False
-    return True
+    else:
+        return True
 
 
 if __name__ == '__main__':

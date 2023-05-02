@@ -4,7 +4,6 @@ from unittest.mock import patch, mock_open, call
 
 from app.models.round import Round
 from app.utils import object_to_dict, file_opener, file_writer
-from app.models.match import Match
 from app.models.player import Player
 from app.models.tournament import Tournament
 from app.models.match import Match
