@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ data[1] }}</title>
+</head>
+<body>
+    <h1>{{ data[1] }}</h1>
+    <br>
+    <ul>
+        {% for round_name, round in data[0].items() %}
+            <li>
+                <b>{{ round_name }}</b> : 
+                <ul>
+                    {% for key, value in round.items() %}
+                        {% if "match_" in key %}
+                            <li>{{ key }} : 
+                                <ul>
+                                    <li>
+                                        Joueur 1 : {{ value["player_one"]["name"] }}, 
+                                        {{ value["player_one"]["last_name"] }}, 
+                                        {{ value["player_one"]["birth_date"] }}
+                                    </li>
+                                    <li>
+                                        Joueur 2 : {{ value["player_two"]["name"] }}, 
+                                        {{ value["player_two"]["last_name"] }}, 
+                                        {{ value["player_two"]["birth_date"] }}
+                                    </li>
+                                    <li>
+                                        Score joueur 1 : {{ value["score_player_one"] }}
+                                    </li>
+                                    <li>
+                                        Score joueur 2 : {{ value["score_player_two"] }}
+                                    </li>
+                                </ul>
+                                
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+                </ul>
+                
+            </li>
+            </br>
+        {% endfor %}
+    </ul>
+</body>
+</html>

@@ -7,7 +7,7 @@ from app.views.main_view import MainView
 def app_running():
     player_controller = PlayerController()
     tournament_controller = TournamentController()
-    # input_choice = MainView().main_menu()
+    input_choice = MainView().main_menu()
     input_choice = 3
     if input_choice == 1:
         MainView().print_title("Création de JOUEUR")
@@ -18,7 +18,7 @@ def app_running():
         tournament_controller.run_new_tournament(player_controller)
         MainView().print_title("Tournoi terminé")
     elif input_choice == 3:
-        FlaskView("players_sorted_by_name")
+        FlaskView("tournament_matchs_list", tournament_selected="Championnat de France")
     elif input_choice == 0:
         return False
     else:

@@ -14,7 +14,7 @@ class MainView:
             print("Voici la liste des choix possible :")
             print("1 : Enregistrer un nouveau JOUEUR")
             print("2 : Enregistrer un nouveau TOURNOI")
-            print("3 : Afficher infos")
+            print("3 : Afficher rapport")
             print("0 : Quitter")
             try:
                 input_choice = int(input("Veuillez saisir un chiffre : "))

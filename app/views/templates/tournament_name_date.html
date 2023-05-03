@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ data[1] }}</title>
+</head>
+<body>
+    <h1>{{ data[1] }}</h1>
+    <ul>
+        {% for value in data[0] %}
+        <li>
+            <b>Nom du tournoi</b> : 
+            {{ value["name"] }}
+        </li>
+        </br>
+        <li>
+            <b>Date de début</b> : 
+            {{ value["date_start"] }}
+        </li>
+        </br>
+        <li>
+            <b>Date de Fin</b> : 
+            {{ value["date_end"] }}
+        </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
