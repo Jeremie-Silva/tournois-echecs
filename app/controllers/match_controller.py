@@ -1,4 +1,4 @@
-from views.main_view import MainView
+from app.views.main_view import MainView
 
 
 class MatchController:

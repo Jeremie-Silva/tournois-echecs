@@ -1,7 +1,7 @@
-from controllers.round_controller import RoundController
-from models.tournament import Tournament
-from views.main_view import MainView
-from utils import file_opener, object_to_dict, file_writer
+from app.controllers.round_controller import RoundController
+from app.models.tournament import Tournament
+from app.views.main_view import MainView
+from app.utils import file_opener, object_to_dict, file_writer
 from datetime import datetime
 
 

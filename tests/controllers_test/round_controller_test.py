@@ -21,7 +21,7 @@ class RoundControllerTestCase(TestCase):
     # RoundController.generate_rounds()
 
     @patch("app.controllers.match_controller.MatchController.retrieve_scores_round")
-    @patch("app.controllers.round_controller.RoundController._generate_matchs")
+    @patch("app.controllers.round_controller.RoundController.generate_matchs")
     def test_round_controller_generate_rounds(self, mock_generate_matchs, mock_score):
         players_list = [
             Player("Clavier", "Christian", "1990-20-10"),
@@ -59,7 +59,7 @@ class RoundControllerTestCase(TestCase):
         self.assertIsInstance(tournament_ready.round_4.date_start, str)
         self.assertIsInstance(tournament_ready.round_4.date_end, str)
 
-    # RoundController._generate_matchs()
+    # RoundController.generate_matchs()
 
     @patch("app.controllers.round_controller.RoundController.get_sorted_players_by_score")
     @patch("app.controllers.round_controller.RoundController.get_last_round")

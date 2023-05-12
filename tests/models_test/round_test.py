@@ -31,9 +31,3 @@ class RoundTestCase(TestCase):
 
     def test_round_attribute_players_list_is_valid(self):
         self.assertEqual(self.round.players_list, self.players_list)
-
-    # Round._generate_matchs()
-    # def test_round_generate_matchs_is_valid(self):
-    #     for index in range(len(self.round.players_list)//2):
-    #         match_name = f"match_{index+1}"
-    #         self.assertIsInstance(getattr(self.round, match_name), Match)

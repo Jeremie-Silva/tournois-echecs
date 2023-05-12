@@ -1,6 +1,6 @@
-from controllers.match_controller import MatchController
-from models.match import Match
-from models.round import Round
+from app.controllers.match_controller import MatchController
+from app.models.match import Match
+from app.models.round import Round
 from datetime import datetime
 from boltons.iterutils import chunked
 

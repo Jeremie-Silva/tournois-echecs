@@ -1,6 +1,6 @@
-from models.player import Player
-from views.main_view import MainView
-from utils import file_opener, object_to_dict, file_writer
+from app.models.player import Player
+from app.views.main_view import MainView
+from app.utils import file_opener, object_to_dict, file_writer
 
 
 class PlayerController:

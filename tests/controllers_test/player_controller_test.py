@@ -7,7 +7,7 @@ from app.models.player import Player
 
 class PlayerControllerTestCase(TestCase):
 
-    # PlayerController._load_players_from_json()
+    # PlayerController.load_players_from_json()
 
     @patch("app.controllers.player_controller.file_opener")
     def test_player_controller_load_players_from_json(self, mock_file_opener):
@@ -31,10 +31,10 @@ class PlayerControllerTestCase(TestCase):
         self.assertEqual(player_controller.player_1.birth_date, "2000-01-02",)
         self.assertEqual(player_controller.player_1.custom_key, "custom_value",)
 
-    # PlayerController._create_player()
+    # PlayerController.create_player()
 
-    @patch("app.controllers.player_controller.PlayerController._load_players_from_json")
-    @patch("app.controllers.player_controller.PlayerController._save_player_to_json")
+    @patch("app.controllers.player_controller.PlayerController.load_players_from_json")
+    @patch("app.controllers.player_controller.PlayerController.save_player_to_json")
     @patch("app.views.main_view.MainView.get_information_user")
     def test_player_controller_create_player_from_json(self, mock_get_info, mock_save, mock_load):
         mock_get_info.side_effect = ["name", "last_name", "birth_date"]
@@ -43,9 +43,9 @@ class PlayerControllerTestCase(TestCase):
         self.assertIsInstance(mock_save.call_args_list[0].args[0], Player)
         self.assertEqual(mock_load.call_count, 2)
 
-    # PlayerController._save_player_to_json()
+    # PlayerController.save_player_to_json()
 
-    @patch("app.controllers.player_controller.PlayerController._load_players_from_json")
+    @patch("app.controllers.player_controller.PlayerController.load_players_from_json")
     @patch("app.controllers.player_controller.file_writer")
     @patch("app.controllers.player_controller.file_opener")
     def test_player_controller_save_player_to_json(self, mock_file_opener, mock_file_writer, mock_load):
@@ -68,6 +68,6 @@ class PlayerControllerTestCase(TestCase):
             "player_4": {"birth_date": "1990-20-10", "last_name": "Christian", "name": "Clavier"},
         }
         mock_file_opener.return_value = data
-        PlayerController()._save_player_to_json(new_player)
+        PlayerController().save_player_to_json(new_player)
         mock_file_opener.assert_called_once_with("players")
         mock_file_writer.assert_called_once_with("players", expected_value)

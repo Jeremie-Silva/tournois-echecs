@@ -1,7 +1,7 @@
-from controllers.tournament_controller import TournamentController
-from controllers.player_controller import PlayerController
-from views.flask_view import FlaskView
-from views.main_view import MainView
+from app.controllers.tournament_controller import TournamentController
+from app.controllers.player_controller import PlayerController
+from app.views.flask_view import FlaskView
+from app.views.main_view import MainView
 
 
 def app_running() -> bool:

@@ -1,5 +1,5 @@
 from flask import Flask, render_template
-from utils import file_opener
+from app.utils import file_opener
 
 
 class FlaskView:

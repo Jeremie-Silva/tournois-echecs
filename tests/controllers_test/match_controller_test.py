@@ -17,7 +17,7 @@ class MatchControllerTestCase(TestCase):
     def test_match_controller_is_defined(self):
         self.assertIsInstance(self.match_controller, MatchController)
 
-    # MatchController._retrieve_scores_round()
+    # MatchController.retrieve_scores_round()
 
     @patch("app.views.main_view.MainView.get_result_match")
     def test_match_controller_retrieve_scores_round(self, mock_get_result):
