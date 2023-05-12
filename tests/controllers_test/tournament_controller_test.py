@@ -40,7 +40,7 @@ class TournamentControllerTestCase(TestCase):
     def test_tournament_controller_create_tournament(self, mock_get_info, mock_create_player_list):
         mock_get_info.side_effect = ["nom du tournoi", "lieu du tournoi", "description du tournoi", 3, 6]
         mock_create_player_list.return_value = self.players_list
-        result = self.tournament_controller._create_tournament(PlayerController())
+        result = self.tournament_controller.create_tournament(PlayerController())
         self.assertIsInstance(result, Tournament)
 
     # TournamentController._create_players_list()
@@ -58,7 +58,7 @@ class TournamentControllerTestCase(TestCase):
         setattr(player_controller_custom, "player_4", Player(name="Stronkjic", last_name="Sanel", birth_date="1111-11-11"))
         setattr(player_controller_custom, "player_5", Player(name="Alaric", last_name="cybersecu", birth_date="1111-11-11"))
         mock_get_info.side_effect = [0, 1, 2, 3, 4, 0, 5]
-        result = self.tournament_controller._create_players_list(5, player_controller_custom)
+        result = self.tournament_controller.create_players_list(5, player_controller_custom)
         # TODO : à refactor sans object_to_dict
         self.assertEqual(
             object_to_dict(result),

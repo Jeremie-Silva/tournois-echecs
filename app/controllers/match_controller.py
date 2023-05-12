@@ -1,17 +1,20 @@
-from app.views.main_view import MainView
+from views.main_view import MainView
 
 
 class MatchController:
+    """The controller for matches"""
 
-    def retrieve_scores_round(self, round):
-        match_index = 1
+    def retrieve_scores_round(self, round: object) -> None:
+        """The method needs a round, it scans the round for matches
+        and asks the user for the score for each match, it also updates the players' scores"""
+        match_index: int = 1
         while True:
-            match_name = f"match_{match_index}"
-            current_match = getattr(round, match_name, None)
+            match_name: str = f"match_{match_index}"
+            current_match: object = getattr(round, match_name, None)
             if current_match is None:
                 break
 
-            result = MainView().get_result_match(current_match)
+            result: str = MainView().get_result_match(current_match)
             if result == "joueur 1":
                 current_match.score_player_one += 1
             elif result == "joueur 2":

@@ -84,7 +84,7 @@ class RoundControllerTestCase(TestCase):
         )
         setattr(tournament, "round_1", Round("round_1", players_list))
         mock_last_round.return_value = getattr(tournament, "round_1")
-        self.round_controller._generate_matchs(tournament)
+        self.round_controller.generate_matchs(tournament)
         self.assertIsInstance(tournament.round_1.match_1, Match)
         self.assertIsInstance(tournament.round_1.match_2, Match)
         self.assertIsInstance(tournament.round_1.match_3, Match)
@@ -107,7 +107,7 @@ class RoundControllerTestCase(TestCase):
         ]
         setattr(tournament, "round_2", Round("round_2", players_list))
         mock_last_round.return_value = getattr(tournament, "round_2")
-        self.round_controller._generate_matchs(tournament)
+        self.round_controller.generate_matchs(tournament)
         self.assertIsInstance(tournament.round_2.match_1, Match)
         self.assertIsInstance(tournament.round_2.match_2, Match)
         self.assertIsInstance(tournament.round_2.match_3, Match)
@@ -185,10 +185,10 @@ class RoundControllerTestCase(TestCase):
         setattr(tournament, "round_1", Round("round_1", players_list))
         setattr(tournament.round_1, "match_1",
                 Match("match_1", tournament.players_list[0], tournament.players_list[1])
-        )
+                )
         setattr(tournament.round_1, "match_2",
                 Match("match_2", tournament.players_list[2], tournament.players_list[3])
-        )
+                )
         setattr(tournament.round_1, "waiting_player", players_list[-1])
         tournament.round_1.match_1.score_player_one = 1
         tournament.round_1.match_1.score_player_two = 0
@@ -205,10 +205,10 @@ class RoundControllerTestCase(TestCase):
 
         setattr(tournament.round_2, "match_1",
                 Match("match_1", sorted_list[0], sorted_list[1])
-        )
+                )
         setattr(tournament.round_2, "match_2",
                 Match("match_2", sorted_list[2], sorted_list[3])
-        )
+                )
         setattr(tournament.round_2, "waiting_player", sorted_list[-1])
         tournament.round_2.match_1.score_player_one = 0
         tournament.round_2.match_1.score_player_two = 1

@@ -27,7 +27,7 @@ Executer ces commandes dans un terminal **bash**
 pour générer un nouveau rapport de codingstyle avec **Flake8**
 ```bash
 flake8 --format=html --htmldir=flake8_report app
-google-chrome flake8_report/players_list.html
+google-chrome flake8_report/index.html
 ```
 Remplacer `google-chrome` par le nom de votre navigateur  
 <br/>
@@ -37,7 +37,7 @@ Executer ces commandes dans un terminal **bash**
 pour générer un nouveau rapport de couverture avec **pytest**
 ```bash
 pytest --cov=app & coverage html
-google-chrome htmlcov/players_list.html
+google-chrome htmlcov/index.html
 ```
 Remplacer `google-chrome` par le nom de votre navigateur  
 <br/>
