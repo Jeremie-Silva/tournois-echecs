@@ -36,7 +36,10 @@ Remplacer `google-chrome` par le nom de votre navigateur
 Executer ces commandes dans un terminal **bash**
 pour générer un nouveau rapport de couverture avec **pytest**
 ```bash
-pytest --cov=app & coverage html
+pytest --cov=app
+```
+```bash
+coverage html
 ```
 ```bash
 google-chrome htmlcov/index.html
